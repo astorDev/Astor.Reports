@@ -2,7 +2,7 @@
 
 namespace Astor.Reports.Data
 {
-    public class ReportsJsonContractResolver : DefaultContractResolver
+    public class ReportsJsonContractResolver : CamelCasePropertyNamesContractResolver// DefaultContractResolver
     {
         protected override string ResolvePropertyName(string propertyName)
         {

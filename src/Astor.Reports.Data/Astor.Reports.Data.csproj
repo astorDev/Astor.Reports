@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
+        <TargetFramework>net5.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
@@ -10,6 +10,7 @@
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Astor.Reports.Domain\Astor.Reports.Domain.csproj" />
       <ProjectReference Include="..\Astor.Reports.Protocol\Astor.Reports.Protocol.csproj" />
     </ItemGroup>
 

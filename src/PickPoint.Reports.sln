@@ -4,9 +4,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Reports.WebApi", "Ast
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Reports.Protocol", "Astor.Reports.Protocol\Astor.Reports.Protocol.csproj", "{345E1B0A-2B44-40B5-8067-73A72EA16208}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Reports.Tests", "Astor.Reports.Tests\Astor.Reports.Tests.csproj", "{0FF4E6CA-9611-4BCC-911D-693338D38F3D}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Reports.Data", "Astor.Reports.Data\Astor.Reports.Data.csproj", "{B484B66D-4D08-436F-81C6-0BA501679EE2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Reports.Domain", "Astor.Reports.Domain\Astor.Reports.Domain.csproj", "{BE0DCA74-CE8F-4F13-A9A3-D266F2248043}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Reports.Tests", "Astor.Reports.Tests\Astor.Reports.Tests.csproj", "{D1DF5680-B289-4E3A-BF28-C43D9B72A921}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -22,13 +24,17 @@ Global
 		{345E1B0A-2B44-40B5-8067-73A72EA16208}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{345E1B0A-2B44-40B5-8067-73A72EA16208}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{345E1B0A-2B44-40B5-8067-73A72EA16208}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0FF4E6CA-9611-4BCC-911D-693338D38F3D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0FF4E6CA-9611-4BCC-911D-693338D38F3D}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0FF4E6CA-9611-4BCC-911D-693338D38F3D}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0FF4E6CA-9611-4BCC-911D-693338D38F3D}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B484B66D-4D08-436F-81C6-0BA501679EE2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B484B66D-4D08-436F-81C6-0BA501679EE2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B484B66D-4D08-436F-81C6-0BA501679EE2}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B484B66D-4D08-436F-81C6-0BA501679EE2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE0DCA74-CE8F-4F13-A9A3-D266F2248043}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE0DCA74-CE8F-4F13-A9A3-D266F2248043}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE0DCA74-CE8F-4F13-A9A3-D266F2248043}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE0DCA74-CE8F-4F13-A9A3-D266F2248043}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D1DF5680-B289-4E3A-BF28-C43D9B72A921}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D1DF5680-B289-4E3A-BF28-C43D9B72A921}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D1DF5680-B289-4E3A-BF28-C43D9B72A921}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D1DF5680-B289-4E3A-BF28-C43D9B72A921}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

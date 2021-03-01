@@ -1,24 +1,23 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TargetFramework>net5.0</TargetFramework>
 
         <IsPackable>false</IsPackable>
-
-        <LangVersion>8</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="3.1.5" />
-        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.2.0" />
-        <PackageReference Include="MSTest.TestAdapter" Version="2.0.0" />
-        <PackageReference Include="MSTest.TestFramework" Version="2.0.0" />
-        <PackageReference Include="coverlet.collector" Version="1.2.0" />
+        <PackageReference Include="Astor.Time" Version="1.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.Testing" Version="5.0.3" />
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.7.1" />
+        <PackageReference Include="MSTest.TestAdapter" Version="2.1.1" />
+        <PackageReference Include="MSTest.TestFramework" Version="2.1.1" />
+        <PackageReference Include="coverlet.collector" Version="1.3.0" />
     </ItemGroup>
 
     <ItemGroup>
-        <ProjectReference Include="..\Astor.Reports.Protocol\Astor.Reports.Protocol.csproj" />
-        <ProjectReference Include="..\Astor.Reports.WebApi\Astor.Reports.WebApi.csproj" />
+      <ProjectReference Include="..\Astor.Reports.Protocol\Astor.Reports.Protocol.csproj" />
+      <ProjectReference Include="..\Astor.Reports.WebApi\Astor.Reports.WebApi.csproj" />
     </ItemGroup>
 
 </Project>

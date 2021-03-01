@@ -1,13 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Astor.Reports.Domain;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Astor.Reports.Protocol.Models;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using Newtonsoft.Json.Serialization;
 
 namespace Astor.Reports.Data
 {
-    public class RowsStore
+    public class RowsStore : IRowsStore
     {
         public IMongoCollection<BsonDocument> Collection { get; }
 
@@ -18,7 +22,22 @@ namespace Astor.Reports.Data
 
         public async Task AddAsync(IEnumerable<dynamic> rows)
         {
-            await this.Collection.InsertManyAsync(rows.Select(r => ((object)r).ToBsonDocument()));
+            var docs = rows.Select(row =>
+            {
+                var json = (string)JsonConvert.SerializeObject(row, new JsonSerializerSettings
+                {
+                    ContractResolver = new CamelCasePropertyNamesContractResolver()
+                });
+
+                var jo = JObject.Parse(json);
+                jo["_id"] = jo["id"];
+                jo.Remove("id");
+
+                json = JsonConvert.SerializeObject(jo);
+                return BsonDocument.Parse(json);
+            });
+            
+            await this.Collection.InsertManyAsync(docs);
         }
 
         public async Task<int> CountAsync(string filter)

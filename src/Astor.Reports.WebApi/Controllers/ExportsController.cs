@@ -29,7 +29,7 @@ namespace PickPoint.Reports.WebApi.Controllers
         [HttpPost("{reportId}" + "/" + Uris.Exports)]
         public async Task<Export> CreateExportAsync(string reportId, [FromBody] ExportConditions conditions)
         {
-            var store = this.StoresFactory.GetRowsStore(reportId);
+            var store = this.StoresFactory.GetRowsStoreInternal(reportId);
 
             var count = await store.CountAsync((string)conditions.Filter?.ToString());
             Console.WriteLine("Export Elements Counted");
@@ -94,7 +94,7 @@ namespace PickPoint.Reports.WebApi.Controllers
             Dictionary<string, string> columns)
         {
             var left = bucket.ElementsCount;
-            var rowsStore = this.StoresFactory.GetRowsStore(export.ReportId);
+            var rowsStore = this.StoresFactory.GetRowsStoreInternal(export.ReportId);
             var query = RowsQuery.ForExport(export, bucket, columns);
             
             var valuesOrder = columns.Select(c => c.Key).ToArray();
@@ -122,7 +122,7 @@ namespace PickPoint.Reports.WebApi.Controllers
         [HttpGet("{reportId}" + "/" + Uris.Exports + "/" + Uris.Csv)]
         public async Task<FileStreamResult> GetCsvAsync(string reportId, [FromQuery] ExportQuery query)
         {
-            var store = this.StoresFactory.GetRowsStore(reportId);
+            var store = this.StoresFactory.GetRowsStoreInternal(reportId);
             
             var resultFilePath = Path.GetTempFileName();
             var left = query.Limit;

@@ -14,7 +14,7 @@ namespace Astor.Reports.Tests
         {
             var reportId = Guid.NewGuid().ToString();
 
-            var rowsStore = this.Factory.ServiceProvider.GetRequiredService<RowsStoresFactory>().GetRowsStore(reportId);
+            var rowsStore = this.Factory.ServiceProvider.GetRequiredService<RowsStoresFactory>().GetRowsStoreInternal(reportId);
             var reportsStore = this.Factory.ServiceProvider.GetRequiredService<ReportsStore>();
 
             await reportsStore.AddAsync(reportId);
@@ -36,7 +36,7 @@ namespace Astor.Reports.Tests
             var report = await client.GetReportAsync(reportId);
             
             Assert.AreEqual(reportId, report.Id);
-            Assert.AreEqual(2, report.ElementsCount);
+            Assert.AreEqual(2, report.RowsCount);
         }
     }
 }

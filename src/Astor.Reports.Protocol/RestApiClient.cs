@@ -25,6 +25,16 @@ namespace Astor.Reports.Protocol
             var json = await response.Content.ReadAsStringAsync();
             return JsonConvert.DeserializeObject<T>(json);
         }
+        
+        protected async Task ReadAsync(HttpResponseMessage response)
+        {
+            await this.OnResponseReceivedAsync(response);
+
+            if (!response.IsSuccessStatusCode)
+            {
+                await this.OnNoneSuccessStatusCode(response);
+            }
+        }
 
         protected virtual Task OnResponseReceivedAsync(HttpResponseMessage response)
         {

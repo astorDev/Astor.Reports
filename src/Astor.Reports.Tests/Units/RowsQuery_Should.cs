@@ -16,7 +16,7 @@ namespace Astor.Reports.Tests
         public async Task CreateValidQuery_WhenSortedByString()
         {
             var reportId = Guid.NewGuid().ToString();
-            var rowsStore = this.Factory.ServiceProvider.GetRequiredService<RowsStoresFactory>().GetRowsStore(reportId);
+            var rowsStore = this.Factory.ServiceProvider.GetRequiredService<RowsStoresFactory>().GetRowsStoreInternal(reportId);
 
             await rowsStore.AddAsync(new[]
             {
@@ -61,7 +61,7 @@ namespace Astor.Reports.Tests
         public async Task CreateValidQuery_WhenSortedByDate()
         {
             var reportId = Guid.NewGuid().ToString();
-            var rowsStore = this.Factory.ServiceProvider.GetRequiredService<RowsStoresFactory>().GetRowsStore(reportId);
+            var rowsStore = this.Factory.ServiceProvider.GetRequiredService<RowsStoresFactory>().GetRowsStoreInternal(reportId);
 
             await rowsStore.AddAsync(new[]
             {

@@ -1,16 +1,18 @@
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Web;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using Astor.Reports.Data.Models;
+using Astor.Reports.Domain;
 using Astor.Reports.Protocol.Models;
 using Export = Astor.Reports.Protocol.Models.Export;
 using Report = Astor.Reports.Data.Models.Report;
 
 namespace Astor.Reports.Data
 {
-    public class ReportsStore
+    public class ReportsStore : IReportsStore
     {
         public IMongoCollection<Models.Report> Collection { get; }
 
@@ -19,9 +21,33 @@ namespace Astor.Reports.Data
             this.Collection = collection;
         }
 
-        public async Task<Models.Report> SearchAsync(string id)
+        public async Task<Domain.Report> SaveAsync(ReportChanges changes)
         {
-            return await this.Collection.Find(r => r.Id == id).FirstOrDefaultAsync();
+            var updateDefinition = new UpdateDefinitionBuilder<Report>()
+                .Combine(getUpdates(changes));
+
+            await this.Collection.UpdateOneAsync(r => r.Id == changes.ReportId, updateDefinition);
+            return await this.SearchAsync(changes.ReportId);
+        }
+
+        private IEnumerable<UpdateDefinition<Report>> getUpdates(ReportChanges changes)
+        {
+            if (changes.Status != null)
+            {
+                yield return new UpdateDefinitionBuilder<Report>().Set(m => m.Status, changes.Status.Value);
+            }
+
+            if (changes.LastModificationTime != null)
+            {
+                yield return new UpdateDefinitionBuilder<Report>().Set(
+                    m => m.LastModificationTime, changes.LastModificationTime.Value);
+            }
+        }
+
+        public async Task<Domain.Report> SearchAsync(string id)
+        {
+            var data = await this.Collection.Find(r => r.Id == id).FirstOrDefaultAsync();
+            return map(data);
         }
         
         public async Task<Models.Report> AddAsync(string id)
@@ -80,6 +106,35 @@ namespace Astor.Reports.Data
                     Filter = data.Id.FilterDotNetObject,
                     Sort = data.Id.SortDotNetObject
                 }
+            };
+        }
+
+        public async Task<Domain.Report> SaveAsync(ReportCreationChanges creationChanges)
+        {
+            var reportData = new Models.Report
+            {
+                Id = creationChanges.ReportToAdd.Id,
+                Type = creationChanges.ReportToAdd.Type,
+                CreationTime = creationChanges.ReportToAdd.CreationTime,
+                LastModificationTime = creationChanges.ReportToAdd.LastModificationTime,
+                EstimatedRowsCount = creationChanges.ReportToAdd.EstimatedRowsCount,
+                Status = creationChanges.ReportToAdd.Status
+            };
+
+            await this.Collection.InsertOneAsync(reportData);
+            return map(reportData);
+        }
+
+        private static Domain.Report map(Report data)
+        {
+            return new Domain.Report
+            {
+                Id = data.Id,
+                Type = data.Type,
+                CreationTime = data.CreationTime,
+                LastModificationTime = data.LastModificationTime,
+                EstimatedRowsCount = data.EstimatedRowsCount,
+                Status = data.Status
             };
         }
     }

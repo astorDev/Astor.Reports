@@ -1,19 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
     <PropertyGroup>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
-        <LangVersion>8</LangVersion>
+        <TargetFramework>net5.0</TargetFramework>
+        <LangVersion>latestmajor</LangVersion>
         <RootNamespace>PickPoint.Reports.WebApi</RootNamespace>
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.5" />
+        <PackageReference Include="Astor.Time" Version="1.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.3" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />
+        <PackageReference Include="Swashbuckle.AspNetCore.Newtonsoft" Version="6.0.7" />
         <PackageReference Include="System.Linq.Async" Version="4.1.1" />
     </ItemGroup>
 
     <ItemGroup>
         <ProjectReference Include="..\Astor.Reports.Data\Astor.Reports.Data.csproj" />
+        <ProjectReference Include="..\Astor.Reports.Domain\Astor.Reports.Domain.csproj" />
         <ProjectReference Include="..\Astor.Reports.Protocol\Astor.Reports.Protocol.csproj" />
     </ItemGroup>
 

@@ -10,8 +10,11 @@ using MongoDB.Driver;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Astor.Reports.Data;
-using Astor.Reports.Data.Models;
+using Astor.Reports.Domain;
+using MongoDB.Bson;
+using Newtonsoft.Json.Converters;
 using PickPoint.Reports.WebApi.Helpers;
+using Report = Astor.Reports.Data.Models.Report;
 
 namespace PickPoint.Reports.WebApi
 {
@@ -30,11 +33,13 @@ namespace PickPoint.Reports.WebApi
                 .AddNewtonsoftJson(json =>
                 {
                     json.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
+                    json.SerializerSettings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
+                    //json.SerializerSettings.
                     json.SerializerSettings.ContractResolver = new ReportsJsonContractResolver();
                 });
 
             services.AddSingleton(new MongoClient(this.Configuration.GetConnectionString("Mongo")));
-            
+
             services.AddSingleton(sp =>
             {
                 var client = sp.GetRequiredService<MongoClient>();
@@ -54,7 +59,10 @@ namespace PickPoint.Reports.WebApi
             });
 
             services.AddSingleton<ReportsStore>();
-            
+            services.AddSingleton<IReportsStore, ReportsStore>();
+            services.AddSingleton<ReportsCollection>();
+
+            services.AddSwaggerGenNewtonsoftSupport();
             services.AddSwaggerGen(swagger =>
             {
                 swagger.SwaggerDoc("v1", new OpenApiInfo
@@ -68,7 +76,7 @@ namespace PickPoint.Reports.WebApi
             {
                 new CamelCaseElementNameConvention(), 
                 new IgnoreIfNullConvention(true),
-                new IgnoreExtraElementsConvention(true), 
+                new IgnoreExtraElementsConvention(true)
             });
         }
 
