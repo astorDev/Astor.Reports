@@ -1,4 +1,6 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Astor.Reports.Data;
 using Astor.Reports.Domain;
@@ -6,6 +8,7 @@ using Astor.Reports.Protocol;
 using Astor.Reports.Protocol.Models;
 using Astor.Time;
 using Report = Astor.Reports.Protocol.Models.Report;
+using ReportsCollection = Astor.Reports.Domain.ReportsCollection;
 
 namespace PickPoint.Reports.WebApi.Controllers
 {
@@ -28,7 +31,15 @@ namespace PickPoint.Reports.WebApi.Controllers
 
             return await this.mapAsync(report);
         }
+        
+        [HttpGet]
+        public async Task<Astor.Reports.Protocol.Models.ReportsCollection> GetAsync([FromQuery]ReportsQuery query)
+        {
+            var reports = await this.ReportsCollection.Store.GetAsync(query);
 
+            return await this.mapAsync(reports);
+        }
+        
         [HttpPost()]
         public async Task<Report> CreateAsync([FromBody] ReportCandidate candidate)
         {
@@ -36,6 +47,22 @@ namespace PickPoint.Reports.WebApi.Controllers
             return await mapAsync(report);
         }
 
+        private async Task<Astor.Reports.Protocol.Models.ReportsCollection> mapAsync(IEnumerable<Astor.Reports.Domain.Report> reports)
+        {
+            var resultList = new List<Report>();
+
+            foreach (var domainModel in reports)
+            {
+                resultList.Add(await this.mapAsync(domainModel));
+            }
+
+            return new Astor.Reports.Protocol.Models.ReportsCollection
+            {
+                Count = resultList.Count,
+                Reports = resultList.ToArray()
+            };
+        }
+        
         private async Task<Report> mapAsync(Astor.Reports.Domain.Report report)
         {
             return new()

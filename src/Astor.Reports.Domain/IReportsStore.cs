@@ -1,4 +1,6 @@
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Astor.Reports.Protocol.Models;
 
 namespace Astor.Reports.Domain
 {
@@ -9,5 +11,7 @@ namespace Astor.Reports.Domain
         Task<Report> SaveAsync(ReportChanges changes);
 
         Task<Report> SearchAsync(string id);
+
+        Task<IEnumerable<Report>> GetAsync(ReportsQuery query);
     }
 }

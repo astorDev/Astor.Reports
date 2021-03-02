@@ -49,7 +49,13 @@ namespace Astor.Reports.Data
             var data = await this.Collection.Find(r => r.Id == id).FirstOrDefaultAsync();
             return map(data);
         }
-        
+
+        public async Task<IEnumerable<Domain.Report>> GetAsync(ReportsQuery query)
+        {
+            var data = await this.Collection.Find(query.ToSpecification().ToExpression()).ToListAsync();
+            return data.Select(map);
+        }
+
         public async Task<Models.Report> AddAsync(string id)
         {
             var report = new Models.Report

@@ -7,6 +7,7 @@ using Astor.Reports.Domain;
 using Astor.Reports.Protocol;
 using Astor.Reports.Protocol.Models;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using ReportsCollection = Astor.Reports.Domain.ReportsCollection;
 
 namespace PickPoint.Reports.WebApi.Controllers
 {
