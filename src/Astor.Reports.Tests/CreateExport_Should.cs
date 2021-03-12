@@ -25,32 +25,32 @@ namespace Astor.Reports.Tests
                 new
                 {
                     type = "good",
-                    created = new DateTime(2020, 1, 1).Add(timeZoneOffset),
+                    created = new DateTime(2020, 1, 1),
                 },
                 new
                 {
                     type = "good",
-                    created = new DateTime(2020, 1, 10).Add(timeZoneOffset),
+                    created = new DateTime(2020, 1, 10),
                 },
                 new
                 {
                     type = "good",
-                    created =  new DateTime(2020, 1, 10).Add(timeZoneOffset)
+                    created =  new DateTime(2020, 1, 10)
                 },
                 new
                 {
                     type = "bad",
-                    created = new DateTime(2020, 1, 6).Add(timeZoneOffset),
+                    created = new DateTime(2020, 1, 6),
                 },
                 new
                 {
                     type = "good",
-                    created = new DateTime(2020, 1, 5).Add(timeZoneOffset)
+                    created = new DateTime(2020, 1, 5)
                 },
                 new
                 {
                     type = "good",
-                    created = new DateTime(2020, 1, 6).Add(timeZoneOffset)
+                    created = new DateTime(2020, 1, 6)
                 }
             });
 

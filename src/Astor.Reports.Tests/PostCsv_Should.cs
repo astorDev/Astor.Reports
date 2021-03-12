@@ -19,7 +19,7 @@ namespace Astor.Reports.Tests
             var collectionName = Guid.NewGuid().ToString();
 
             var storeFactory = this.Factory.ServiceProvider.GetRequiredService<RowsStoresFactory>();
-            var store = storeFactory.GetRowsStore(collectionName);
+            var store = storeFactory.GetRowsStoreInternal(collectionName);
 
             var reportsStore = this.Factory.ServiceProvider.GetRequiredService<ReportsStore>();
             await reportsStore.AddAsync(collectionName);

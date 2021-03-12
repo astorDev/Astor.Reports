@@ -62,7 +62,7 @@ namespace Astor.Reports.Tests
             var collectionName = Guid.NewGuid().ToString();
 
             var storeFactory = this.Factory.ServiceProvider.GetRequiredService<RowsStoresFactory>();
-            var store = storeFactory.GetRowsStore(collectionName);
+            var store = storeFactory.GetRowsStoreInternal(collectionName);
 
             await store.AddAsync(this.TestData);
 
@@ -81,7 +81,7 @@ namespace Astor.Reports.Tests
             var collectionName = Guid.NewGuid().ToString();
 
             var storeFactory = this.Factory.ServiceProvider.GetRequiredService<RowsStoresFactory>();
-            var store = storeFactory.GetRowsStore(collectionName);
+            var store = storeFactory.GetRowsStoreInternal(collectionName);
 
             await store.AddAsync(this.TestData);
 

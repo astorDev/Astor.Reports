@@ -13,7 +13,7 @@ namespace Astor.Reports.Tests
 
             var about = await client.GetAboutAsync();
 
-            Assert.AreEqual("PickPoint.Reports - API отчётов", about.Description);
+            Assert.AreEqual("Astor.Reports - API отчётов", about.Description);
             Assert.AreEqual("1.0.0.0", about.Version);
             Assert.AreEqual("Development", about.Environment);
         }

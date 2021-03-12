@@ -1,13 +1,11 @@
 {
   "profiles": {
-    "Development": {
+    "Local": {
       "commandName": "Project",
+      "applicationUrl": "http://localhost:5000",
       "launchBrowser": true,
       "launchUrl": "swagger",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "http://localhost:5000"
+      "commandLineArgs": "--ConnectionStrings:Mongo=mongodb://localhost:27017"
     }
   }
 }

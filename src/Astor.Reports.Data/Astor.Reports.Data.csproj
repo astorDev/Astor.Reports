@@ -1,15 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
     <PropertyGroup>
-        <TargetFramework>netstandard2.1</TargetFramework>
+        <TargetFramework>net5.0</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
       <PackageReference Include="MongoDB.Driver" Version="2.11.0" />
+      <PackageReference Include="SpeciVacation" Version="1.0.2" />
     </ItemGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Astor.Reports.Domain\Astor.Reports.Domain.csproj" />
       <ProjectReference Include="..\Astor.Reports.Protocol\Astor.Reports.Protocol.csproj" />
     </ItemGroup>
 

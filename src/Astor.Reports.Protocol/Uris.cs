@@ -12,6 +12,10 @@
 
         public const string Maps = "maps";
 
+        public const string Pages = "pages";
+
+        public static string ReportPages(string reportId) => $"{reportId}/{Pages}";
+
         public static string ReportExportCsv(string reportId, string exportId) =>
             $"{ReportExport(reportId, exportId)}/{Csv}";
 

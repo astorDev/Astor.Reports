@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Net;
+using Astor.Reports.Domain;
 
 namespace PickPoint.Reports.WebApi
 {
@@ -24,6 +25,12 @@ namespace PickPoint.Reports.WebApi
             Reason = "ExportNotFound"
         };
 
+        public static Error ReportNotFound => new Error
+        {
+            Code = HttpStatusCode.BadRequest,
+            Reason = "ReportNotFound"
+        };
+
         public static Error Interpret(Exception exception, bool showDetails)
         {
             var error = interpret(exception);
@@ -43,6 +50,8 @@ namespace PickPoint.Reports.WebApi
 
         private static Error interpret(Exception exception)
         {
+            if (exception is ReportNotFoundException) return ReportNotFound;
+            
             return Unknown;
         }
 

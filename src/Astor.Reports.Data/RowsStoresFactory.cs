@@ -1,9 +1,10 @@
-﻿using MongoDB.Bson;
+﻿using Astor.Reports.Domain;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Astor.Reports.Data
 {
-    public class RowsStoresFactory
+    public class RowsStoresFactory : IRowsStoreFactory
     {
         public IMongoDatabase Db { get; }
 
@@ -12,10 +13,12 @@ namespace Astor.Reports.Data
             this.Db = db;
         }
 
-        public RowsStore GetRowsStore(string reportName)
+        public RowsStore GetRowsStoreInternal(string reportName)
         {
             var collection = this.Db.GetCollection<BsonDocument>(reportName);
             return new RowsStore(collection);
         }
+
+        public IRowsStore GetRowsStore(string reportId) => this.GetRowsStoreInternal(reportId);
     }
 }
