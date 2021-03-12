@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Astor.Reports.Protocol.Models;
 using Astor.Time;
@@ -58,14 +60,41 @@ namespace Astor.Reports.Tests.Scenarios
                     },
                     new Person
                     {
-                        Id = "66",
+                        Id = "77",
                         Name = "George"
                     }
                 }
             });
+
+            var dailyList = await client.GetReportsAsync(new ReportsQuery
+            {
+                Type = "DailyMetrics",
+                ModifiedAfter = new DateTime(2000, 1, 15, 9, 0, 0)
+            });
+
+            var uniqueIds = new List<string>();
+
+            foreach (var report in dailyList.Reports)
+            {
+                var ids = await client.GetRows(report.Id, new RowsQuery
+                {
+                    Projection = "{ 'id' : 1 }"
+                });
+
+                foreach (var idRow in ids.Rows)
+                {
+                    string id = idRow["id"];
+                    if (!uniqueIds.Contains(id))
+                    {
+                        uniqueIds.Add(id);
+                    }
+                }
+            }
             
-            
-            
+            Assert.AreEqual(3, uniqueIds.Count);
+            Assert.IsTrue(uniqueIds.Contains("5"));
+            Assert.IsTrue(uniqueIds.Contains("77"));
+            Assert.IsTrue(uniqueIds.Contains("66"));
         }
     }
 

@@ -37,7 +37,7 @@ namespace Astor.Reports.Data.Queries
             var endFilter = new BsonDocument(sortingField, new BsonDocument(order == -1 ? "$gte" : "$lte", bucket.End));
             
             string mainFilterRawString = JObject.FromObject(export.Conditions.Filter ?? new {}).ToString();
-            var mainFilterString = mainFilterRawString.Replace("*dollar*", "$");
+            var mainFilterString = mainFilterRawString.Replace("*dollar*", "$").Replace("id", "_id");
             var mainFilter = new JsonFilterDefinition<BsonDocument>(mainFilterString);
 
             return Builders<BsonDocument>.Filter.And(startFilter, endFilter, mainFilter);

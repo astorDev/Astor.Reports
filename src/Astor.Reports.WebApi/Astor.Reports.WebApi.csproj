@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+        <PackageReference Include="Astor.Logging" Version="1.0.0" />
         <PackageReference Include="Astor.Time" Version="1.0.0" />
         <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="5.0.3" />
         <PackageReference Include="Swashbuckle.AspNetCore" Version="5.5.1" />

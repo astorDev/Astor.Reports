@@ -20,7 +20,7 @@ namespace PickPoint.Reports.WebApi.Controllers
         {
             return new About
             {
-                Description = "PickPoint.Reports - API отчётов",
+                Description = "Astor.Reports - API отчётов",
                 Environment = this.Environment.EnvironmentName,
                 Version = this.GetType().Assembly.GetName().Version.ToString()
             };

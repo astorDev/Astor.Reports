@@ -30,7 +30,12 @@ namespace Astor.Reports.Data
                 });
 
                 var jo = JObject.Parse(json);
-                jo["_id"] = jo["id"];
+                var id = jo["id"] ?? jo["Id"];
+                if (id != null)
+                {
+                    jo["_id"] = id;    
+                }
+                
                 jo.Remove("id");
 
                 json = JsonConvert.SerializeObject(jo);
@@ -51,7 +56,7 @@ namespace Astor.Reports.Data
         {
             var afterIdFilter = new JsonFilterDefinition<BsonDocument>($"{{ '_id' : {{ '$gt' : '{query.AfterId}' }} }}");
 
-            var passedFilterString = query.Filter ?? "{}";
+            var passedFilterString = query.Filter?.AdaptFilterForMongo() ?? "{}";
             var passedFilter = new JsonFilterDefinition<BsonDocument>(passedFilterString);
 
             var filter = Builders<BsonDocument>.Filter.And(afterIdFilter, passedFilter);
@@ -62,8 +67,8 @@ namespace Astor.Reports.Data
                 .Project(projection)
                 .Limit(query.Limit)
                 .ToListAsync();
-            
-            return rawDocs.Select(BsonTypeMapper.MapToDotNetValue);
+
+            return rawDocs.Select(MongoToDynamicMapper.ToNormalizedDynamic);
         }
 
         public async IAsyncEnumerable<dynamic> GetAsyncEnumerable(Queries.RowsQuery query)

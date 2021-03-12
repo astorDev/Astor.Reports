@@ -1,3 +1,4 @@
+using Astor.Logging;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
@@ -33,8 +34,6 @@ namespace PickPoint.Reports.WebApi
                 .AddNewtonsoftJson(json =>
                 {
                     json.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
-                    json.SerializerSettings.Converters.Add(new StringEnumConverter(new CamelCaseNamingStrategy()));
-                    //json.SerializerSettings.
                     json.SerializerSettings.ContractResolver = new ReportsJsonContractResolver();
                 });
 
@@ -82,6 +81,7 @@ namespace PickPoint.Reports.WebApi
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            app.UseRequestsLogging(l => l.IgnoredPathPatterns.Add("swagger"));
             app.UseSwagger();
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "PickPoint.Reports"); });
 

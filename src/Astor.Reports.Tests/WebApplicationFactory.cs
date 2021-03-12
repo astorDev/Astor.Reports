@@ -57,8 +57,6 @@ namespace Astor.Reports.Tests
 
             protected override async Task OnResponseReceivedAsync(HttpResponseMessage response)
             {
-                var responseString = await response.Content.ReadAsStringAsync();
-                Console.WriteLine(responseString);
             }
         }
     }
