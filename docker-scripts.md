@@ -1,6 +1,4 @@
-﻿#Запуск сервиса
+﻿To build the service from root run
 
-docker build src --file src/Astor.Reports.WebApi/Dockerfile --tag reports-webapi
-
-#Публикация сервиса в docker-registry
+`docker build src --file src/Astor.Reports.WebApi/Dockerfile --tag vosarat/reports-webapi:1.0`
 
