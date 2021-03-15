@@ -1,0 +1,21 @@
+﻿version: '3.4'
+
+volumes:
+  reports-db:
+
+services:
+  webapi:
+    image: vosarat/reports-webapi:1.0
+    environment:
+      MONGO_CONNECTIONSTRING: mongodb://db:27017
+    ports:
+    - 7000:80
+    depends_on:
+      - db
+  db:
+    image: mongo:3.6.22
+    restart: always
+    ports:
+      - 27030:27017
+    volumes:
+      - reports-db:/data/db
