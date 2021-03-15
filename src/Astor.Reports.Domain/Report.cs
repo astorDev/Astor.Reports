@@ -41,7 +41,7 @@ namespace Astor.Reports.Domain
 
         public static Task<Report> CreateAsync(ReportCandidate candidate, IReportsStore store)
         {
-            var id = $"{candidate.Type}_{Clock.Time:yyyy-MM-ddThh:mm:ss}";
+            var id = $"{candidate.Type}_{Clock.Time:yyyy-MM-ddTHH:mm:ss}";
             
             var changes = new ReportCreationChanges
             {
