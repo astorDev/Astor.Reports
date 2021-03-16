@@ -21,7 +21,6 @@ namespace Astor.Reports.Tests.Scenarios
             var reportOne = await client.CreateReportAsync(new ReportCandidate
             {
                 Type = "DailyMetrics",
-                Status = ReportStatus.New
             });
 
             await client.AddPagesAsync(reportOne.Id, new PageCandidate
@@ -46,7 +45,6 @@ namespace Astor.Reports.Tests.Scenarios
             var reportTwo = await client.CreateReportAsync(new ReportCandidate
             {
                 Type = "DailyMetrics",
-                Status = ReportStatus.New
             });
 
             await client.AddPagesAsync(reportTwo.Id, new PageCandidate

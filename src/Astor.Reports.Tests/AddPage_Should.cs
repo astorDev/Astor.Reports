@@ -18,7 +18,6 @@ namespace Astor.Reports.Tests
             {
                 Type = "AutotestPage",
                 EstimatedRowsCount = 5,
-                Status = ReportStatus.New
             });
             
             Clock.Time = new DateTime(2020, 1, 1, 11, 0, 0);
@@ -45,7 +44,6 @@ namespace Astor.Reports.Tests
             {
                 Type = "AutotestPage",
                 EstimatedRowsCount = 5,
-                Status = ReportStatus.New
             });
             
             Clock.Time = new DateTime(2020, 1, 1, 11, 0, 0);

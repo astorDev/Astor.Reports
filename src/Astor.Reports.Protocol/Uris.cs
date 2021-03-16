@@ -14,6 +14,8 @@
 
         public const string Pages = "pages";
 
+        public const string Events = "events";
+
         public static string ReportPages(string reportId) => $"{reportId}/{Pages}";
 
         public static string ReportExportCsv(string reportId, string exportId) =>

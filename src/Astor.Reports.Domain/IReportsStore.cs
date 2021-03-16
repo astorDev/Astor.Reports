@@ -13,5 +13,7 @@ namespace Astor.Reports.Domain
         Task<Report> SearchAsync(string id);
 
         Task<IEnumerable<Report>> GetAsync(ReportsQuery query);
+
+        Task<IEnumerable<Report>> GetAsync(ReportsFilter filter);
     }
 }

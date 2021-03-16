@@ -7,7 +7,7 @@ namespace Astor.Reports.Domain
     {
         public Report ReportToAdd { get; set; }
 
-        public string RowsCollectionToCreate { get; set; }
+        public EventCandidate[] Events { get; set; }
 
         public class Report
         {
@@ -16,10 +16,6 @@ namespace Astor.Reports.Domain
             public string Type { get; set; }
 
             public ReportStatus Status { get; set; }
-
-            public DateTime CreationTime { get; set; }
-
-            public DateTime LastModificationTime { get; set; }
 
             public int? EstimatedRowsCount { get; set; }
         }

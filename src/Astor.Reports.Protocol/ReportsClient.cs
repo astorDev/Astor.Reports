@@ -24,10 +24,23 @@ namespace Astor.Reports.Protocol
             return await this.ReadAsync<Report>(response);
         }
 
+        public async Task<Report> UpdateReportAsync(string id, ReportChanges changes)
+        {
+            var response = await this.HttpClient.PatchJsonAsync(id, changes);
+            return await this.ReadAsync<Report>(response);
+        }
+
         public async Task<ReportsCollection> GetReportsAsync(ReportsQuery filter)
         {
             var response = await this.HttpClient.GetAsync(HttpHelper.GetQueryString("", filter));
             return await this.ReadAsync<ReportsCollection>(response);
+        }
+
+        public async Task<ReportEventsCollection> GetReportEventsAsync(EventsQuery query)
+        {
+            var uri = HttpHelper.GetQueryString(Uris.Events, query);
+            var response = await this.HttpClient.GetAsync(uri);
+            return await this.ReadAsync<ReportEventsCollection>(response);
         }
         
         public async Task AddPagesAsync(string reportId, PageCandidate candidate)

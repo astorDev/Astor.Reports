@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using Astor.Reports.Protocol.Models;
 using SpeciVacation;
@@ -52,7 +53,15 @@ namespace Astor.Reports.Data
 
             public override Expression<Func<Report, bool>> ToExpression()
             {
-                return r => r.LastModificationTime > this.Time;
+                return r => r.Events.Any(e => e.Time > this.Time);
+            }
+        }
+
+        public class AnyUnprocessedEventSpecification : Specification<Report>
+        {
+            public override Expression<Func<Report, bool>> ToExpression()
+            {
+                return r => r.Events.Any(e => !e.Processed);
             }
         }
     }

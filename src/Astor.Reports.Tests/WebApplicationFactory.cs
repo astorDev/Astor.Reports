@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
@@ -6,6 +7,7 @@ using Astor.Reports.Protocol;
 using PickPoint.Reports.WebApi;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.AspNetCore.TestHost;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 
@@ -25,13 +27,13 @@ namespace Astor.Reports.Tests
 
         protected override void ConfigureWebHost(IWebHostBuilder builder)
         {
-            builder.ConfigureTestServices(services =>
+            builder.ConfigureAppConfiguration(c =>
             {
-                services.AddSingleton(new MongoClient("mongodb://localhost:27017"));
-
-                
+                c.AddInMemoryCollection(new KeyValuePair<string, string>[]
+                {
+                    new("ConnectionStrings:Mongo", "mongodb://localhost:27017")
+                });
             });
-
         }
 
         public IServiceProvider ServiceProvider

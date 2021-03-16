@@ -71,6 +71,8 @@ namespace PickPoint.Reports.WebApi
                 });
             });
 
+            services.AddScoped<ReportsMapper>();
+
             MongoConventions.Register(new IConvention[]
             {
                 new CamelCaseElementNameConvention(), 
@@ -81,7 +83,12 @@ namespace PickPoint.Reports.WebApi
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseRequestsLogging(l => l.IgnoredPathPatterns.Add("swagger"));
+            app.UseRequestsLogging(l =>
+            {
+                l.IgnoredPathPatterns.Add("swagger");
+                l.IgnoredPathPatterns.Add("events");
+            });
+            
             app.UseSwagger();
             app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "PickPoint.Reports"); });
 
