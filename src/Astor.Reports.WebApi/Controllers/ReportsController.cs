@@ -19,9 +19,9 @@ namespace PickPoint.Reports.WebApi.Controllers
     {
         public ReportsCollection ReportsCollection { get; }
         public RowsStoresFactory RowsStoresFactory { get; }
-        public ReportsMapper Mapper { get; }
+        public Mapper Mapper { get; }
 
-        public ReportsController(ReportsCollection reportsCollection, RowsStoresFactory rowsStoresFactory, ReportsMapper mapper)
+        public ReportsController(ReportsCollection reportsCollection, RowsStoresFactory rowsStoresFactory, Mapper mapper)
         {
             this.ReportsCollection = reportsCollection;
             this.RowsStoresFactory = rowsStoresFactory;

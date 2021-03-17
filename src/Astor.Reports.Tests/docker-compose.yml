@@ -8,6 +8,7 @@ services:
     restart: always
   rabbit:
     image: rabbitmq:3-management
+    restart: always
     ports:
       - 15672:15672
       - 5672:5672

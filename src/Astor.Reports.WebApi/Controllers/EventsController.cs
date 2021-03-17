@@ -8,35 +8,38 @@ using Astor.Reports.Protocol.Models;
 using Microsoft.AspNetCore.Mvc;
 using PickPoint.Reports.WebApi.Helpers;
 using Report = Astor.Reports.Protocol.Models.Report;
+using ReportsCollection = Astor.Reports.Domain.ReportsCollection;
 
 namespace PickPoint.Reports.WebApi.Controllers
 {
     [Route(Uris.Events)]
     public class EventsController
     {
-        public IReportsStore ReportsStore { get; }
-        public ReportsMapper ReportsMapper { get; }
+        public ReportsCollection Reports { get; }
+        public Mapper Mapper { get; }
+        public IEventsStore EventsStore { get; }
 
-        public EventsController(IReportsStore reportsStore, ReportsMapper reportsMapper)
+        public EventsController(ReportsCollection reports, Mapper mapper, IEventsStore eventsStore)
         {
-            this.ReportsStore = reportsStore;
-            this.ReportsMapper = reportsMapper;
+            this.Reports = reports;
+            this.Mapper = mapper;
+            this.EventsStore = eventsStore;
         }
         
         [HttpGet]
         public async Task<ReportEventsCollection> GetReportEventsAsync([FromQuery] EventsQuery query)
         {
-            if (query.Processed != false)
+            var eventsFilter = new EventsFilter
             {
-                throw new NotImplementedException("Only unprocessed events filter is possible");
-            }
-
-            var reports = await this.ReportsStore.GetAsync(new ReportsFilter
+                Processed = query.Processed
+            };
+            
+            var reports = await this.Reports.Store.GetAsync(new ReportsFilter
             {
-                AnyUnprocessedEvents = true
+                AnyEvent = eventsFilter
             });
 
-            var resultArray = await this.GetUnprocessedEvents(reports).ToArrayAsync();
+            var resultArray = await this.Mapper.MapAsync(reports, eventsFilter).ToArrayAsync();
             return new ReportEventsCollection
             {
                 Count = resultArray.Length,
@@ -44,25 +47,25 @@ namespace PickPoint.Reports.WebApi.Controllers
             };
         }
 
-        private async IAsyncEnumerable<ReportEvent> GetUnprocessedEvents(IEnumerable<Astor.Reports.Domain.Report> reports)
+        [HttpPatch("{id}")]
+        public async Task<ReportEvent> UpdateEventAsync(string id, [FromBody] ReportEventChanges changes)
         {
-            foreach (var report in reports)
+            var eventsFilter = new EventsFilter
             {
-                foreach (var @event in report.Events.Where(e => !e.Processed))
-                {
-                    yield return new ReportEvent
-                    {
-                        Id = @event.Id,
-                        Type = @event.Type,
-                        Processed = @event.Processed,
-                        Body = new ReportEventBody
-                        {
-                            Time = @event.Time,
-                            Report = await this.ReportsMapper.MapAsync(report)
-                        }
-                    };
-                }
-            }
+                Ids = new[] {id}
+            };
+            
+            var report = await this.Reports.GetAsync(new ReportsFilter
+            {
+                AnyEvent = eventsFilter
+            });
+
+            report = await report.UpdateEvent(id, new ReportEventChanges
+            {
+                Processed = changes.Processed
+            }, this.EventsStore, this.Reports.Store);
+
+            return await this.Mapper.MapAsync(report, eventsFilter).SingleAsync();
         }
     }
 }

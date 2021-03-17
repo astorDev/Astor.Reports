@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
 using Astor.Reports.Protocol;
 using Astor.Reports.Protocol.Models;
@@ -11,19 +10,29 @@ namespace Astor.Reports.Domain
 {
     public class Report
     {
-        public string Id { get; set; }
+        public string Id { get; init; }
         
-        public string Type { get; set; }
+        public string Type { get; init; }
         
-        public ReportStatus Status { get; set; }
+        public ReportStatus Status { get; init; }
 
         public DateTime CreationTime => this.Events.Single(e => e.Type == EventNames.Created).Time;
 
         public DateTime LastModificationTime => this.Events.OrderByDescending(e => e.Time).First().Time;
         
-        public int? EstimatedRowsCount { get; set; }
+        public int? EstimatedRowsCount { get; init; }
         
-        public Event[] Events { get; set; }
+        public Event[] Events { get; init; }
+
+        public async Task<Report> UpdateEvent(string id, ReportEventChanges eventChanges, IEventsStore eventsStore, IReportsStore reportsStore)
+        {
+            await eventsStore.SaveAsync(new EventChanges(id)
+            {
+                Processed = eventChanges.Processed
+            });
+
+            return await reportsStore.SearchAsync(this.Id);
+        }
 
         public async Task<int> CountRowsAsync(string filter, IRowsStoreFactory rowsStoreFactory)
         {
@@ -64,6 +73,11 @@ namespace Astor.Reports.Domain
             }
 
             return this;
+        }
+
+        public IEnumerable<Event> GetEvents(EventsFilter filter)
+        {
+            return this.Events.Where(filter.ToSpecification().ToExpression().Compile());
         }
 
         public static Task<Report> CreateAsync(ReportCandidate candidate, IReportsStore store)

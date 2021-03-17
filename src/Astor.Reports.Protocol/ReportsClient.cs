@@ -42,6 +42,12 @@ namespace Astor.Reports.Protocol
             var response = await this.HttpClient.GetAsync(uri);
             return await this.ReadAsync<ReportEventsCollection>(response);
         }
+
+        public async Task<ReportEvent> UpdateReportEventAsync(string id, ReportEventChanges changes)
+        {
+            var response = await this.HttpClient.PatchJsonAsync(Uris.Event(id), changes);
+            return await this.ReadAsync<ReportEvent>(response);
+        }
         
         public async Task AddPagesAsync(string reportId, PageCandidate candidate)
         {

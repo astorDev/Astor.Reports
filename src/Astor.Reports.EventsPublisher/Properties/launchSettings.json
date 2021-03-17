@@ -3,7 +3,7 @@
   "profiles": {
     "Local": {
       "commandName": "Project",
-      "commandLineArgs": "--ConnectionStrings:Rabbit=amqp://localhost:5672 --ExchangeFamily=astor"
+      "commandLineArgs": "--ConnectionStrings:Rabbit=amqp://localhost:5672 --ConnectionStrings:Webapi=http://localhost:7000 --ExchangePrefix=astor.reports"
     }
   }
 }

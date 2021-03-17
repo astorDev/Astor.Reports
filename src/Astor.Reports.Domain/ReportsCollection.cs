@@ -21,5 +21,16 @@ namespace Astor.Reports.Domain
 
             return report;
         }
+
+        public async Task<Report> GetAsync(ReportsFilter filter)
+        {
+            var report = await this.Store.SearchAsync(filter);
+            if (report == null)
+            {
+                throw new ReportNotFoundException();
+            }
+
+            return report;
+        } 
     }
 }

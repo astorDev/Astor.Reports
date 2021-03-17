@@ -1,4 +1,5 @@
-﻿using Astor.RabbitMq;
+﻿using System;
+using Astor.RabbitMq;
 using Astor.Reports.Protocol;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -18,6 +19,11 @@ namespace Astor.Reports.EventsPublisher
         {
             var rabbitConnectionString = this.Configuration["ConnectionStrings:Rabbit"];
             services.AddRabbit(rabbitConnectionString);
+
+            services.AddHttpClient<ReportsClient>(cl =>
+            {
+                cl.BaseAddress = new Uri(this.Configuration["ConnectionStrings:Webapi"]);
+            });
         }
     }
 }

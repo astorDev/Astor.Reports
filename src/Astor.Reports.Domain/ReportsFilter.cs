@@ -2,6 +2,6 @@
 {
     public class ReportsFilter
     {
-        public bool? AnyUnprocessedEvents { get; set; }
+        public EventsFilter AnyEvent { get; set; }
     }
 }

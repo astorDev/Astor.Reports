@@ -6,14 +6,10 @@ volumes:
 services:
   webapi:
     image: vosarat/reports-webapi:1.1
-    restart: always
-    build:
-      context: src
-      dockerfile: Astor.Reports.WebApi/Dockerfile
     environment:
       MONGO_CONNECTIONSTRING: mongodb://db:27017
     ports:
-      - 7000:80
+    - 7000:80
     depends_on:
       - db
   db:
@@ -25,10 +21,6 @@ services:
       - reports-db:/data/db
   events-publisher:
     image: vosarat/reports-events-publisher:1.0
-    restart: always
-    build:
-      context: src
-      dockerfile: Astor.Reports.EventsPublisher/Dockerfile
     environment:
       RABBIT_CONNECTIONSTRING: amqp://mq:5672
       WABAPI_URL: http://webapi:80
@@ -37,7 +29,6 @@ services:
       - mq
   mq:
     image: rabbitmq:3-management
-    restart: always
     ports:
       - 15673:15672
       - 5673:5672

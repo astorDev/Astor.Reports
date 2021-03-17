@@ -10,6 +10,7 @@ using Astor.Reports.Domain;
 using Astor.Reports.Protocol;
 using Astor.Reports.Protocol.Models;
 using SpeciVacation;
+using Event = Astor.Reports.Data.Models.Event;
 using Export = Astor.Reports.Protocol.Models.Export;
 using Report = Astor.Reports.Data.Models.Report;
 using ReportChanges = Astor.Reports.Domain.ReportChanges;
@@ -60,6 +61,12 @@ namespace Astor.Reports.Data
             return map(data);
         }
 
+        public async Task<Domain.Report> SearchAsync(ReportsFilter filter)
+        {
+            var report = await this.finder(filter).FirstOrDefaultAsync();
+            return map(report);
+        }
+
         public async Task<IEnumerable<Domain.Report>> GetAsync(ReportsQuery query)
         {
             var data = await this.Collection.Find(query.ToSpecification().ToExpression()).ToListAsync();
@@ -68,15 +75,23 @@ namespace Astor.Reports.Data
 
         public async Task<IEnumerable<Domain.Report>> GetAsync(ReportsFilter filter)
         {
+            var data = await this.finder(filter).ToListAsync();
+            return data.Select(map);
+        }
+
+        public IFindFluent<Report, Report> finder(ReportsFilter filter)
+        {
             var spec = Specification<Data.Models.Report>.All;
+
+            FilterDefinition<Report> mongoFilter = spec.ToExpression();
             
-            if (filter.AnyUnprocessedEvents == true)
+            if (filter.AnyEvent != null)
             {
-                spec = spec.And(new ReportsSpecification.AnyUnprocessedEventSpecification());
+                mongoFilter &= new FilterDefinitionBuilder<Report>()
+                    .ElemMatch(r => r.Events, filter.AnyEvent.ToSpecification().ToExpression());;
             }
 
-            var data = await this.Collection.Find(spec.ToExpression()).ToListAsync();
-            return data.Select(map);
+            return this.Collection.Find(mongoFilter);
         }
 
         public async Task<Models.Report> AddAsync(string id)

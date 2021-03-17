@@ -1,7 +1,11 @@
-﻿namespace Astor.Reports.Domain
+﻿using System.Collections.Generic;
+
+namespace Astor.Reports.Domain
 {
-    public class EventFilter
+    public class EventsFilter
     {
-        public bool? Unprocessed { get; set; }
+        public IEnumerable<string> Ids { get; set; }
+        
+        public bool? Processed { get; set; }
     }
 }

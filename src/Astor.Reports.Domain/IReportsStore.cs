@@ -11,6 +11,7 @@ namespace Astor.Reports.Domain
         Task<Report> SaveAsync(ReportChanges changes);
 
         Task<Report> SearchAsync(string id);
+        Task<Report> SearchAsync(ReportsFilter filter);
 
         Task<IEnumerable<Report>> GetAsync(ReportsQuery query);
 

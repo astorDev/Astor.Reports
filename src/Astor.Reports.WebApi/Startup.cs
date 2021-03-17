@@ -12,6 +12,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Astor.Reports.Data;
 using Astor.Reports.Domain;
+using Microsoft.Extensions.Hosting;
 using MongoDB.Bson;
 using Newtonsoft.Json.Converters;
 using PickPoint.Reports.WebApi.Helpers;
@@ -35,6 +36,7 @@ namespace PickPoint.Reports.WebApi
                 {
                     json.SerializerSettings.NullValueHandling = NullValueHandling.Ignore;
                     json.SerializerSettings.ContractResolver = new ReportsJsonContractResolver();
+                    json.SerializerSettings.Converters.Add(new StringEnumConverter());
                 });
 
             services.AddSingleton(new MongoClient(this.Configuration.GetConnectionString("Mongo")));
@@ -60,6 +62,7 @@ namespace PickPoint.Reports.WebApi
             services.AddSingleton<ReportsStore>();
             services.AddSingleton<IReportsStore, ReportsStore>();
             services.AddSingleton<ReportsCollection>();
+            services.AddScoped<IEventsStore, EventsStore>();
 
             services.AddSwaggerGenNewtonsoftSupport();
             services.AddSwaggerGen(swagger =>
@@ -71,7 +74,7 @@ namespace PickPoint.Reports.WebApi
                 });
             });
 
-            services.AddScoped<ReportsMapper>();
+            services.AddScoped<Mapper>();
 
             MongoConventions.Register(new IConvention[]
             {
@@ -86,7 +89,11 @@ namespace PickPoint.Reports.WebApi
             app.UseRequestsLogging(l =>
             {
                 l.IgnoredPathPatterns.Add("swagger");
-                l.IgnoredPathPatterns.Add("events");
+
+                if (!env.IsDevelopment())
+                {
+                    l.IgnoredPathPatterns.Add("events");
+                }
             });
             
             app.UseSwagger();

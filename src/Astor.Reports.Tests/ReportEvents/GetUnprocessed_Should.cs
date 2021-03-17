@@ -12,6 +12,19 @@ namespace Astor.Reports.Tests.ReportEvents
     public class GetUnprocessed_Should : Test
     {
         [TestMethod]
+        public async Task ReturnEmptyList_OnFirstRun()
+        {
+            var client = this.Factory.Create();
+
+            var unprocessed = await client.GetReportEventsAsync(new EventsQuery
+            {
+                Processed = false
+            });
+            
+            Assert.AreEqual(0, unprocessed.Count);
+        }
+        
+        [TestMethod]
         public async Task ReturnCreatedEventOfReport()
         {
             var client = this.Factory.Create();

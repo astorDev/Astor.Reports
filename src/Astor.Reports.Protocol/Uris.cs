@@ -28,5 +28,7 @@
         public static string ExportCsv(string reportId) => $"{reportId}/exports/csv";
         
         public static string ReportRows(string reportId) => $"{reportId}/{Rows}";
+
+        public static string Event(string id) => $"{Events}/{id}";
     }
 }
