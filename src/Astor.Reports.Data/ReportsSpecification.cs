@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Linq.Expressions;
 using Astor.Reports.Protocol.Models;
 using SpeciVacation;
+using Event = Astor.Reports.Data.Models.Event;
 using Report = Astor.Reports.Data.Models.Report;
 
 namespace Astor.Reports.Data
@@ -52,10 +54,8 @@ namespace Astor.Reports.Data
 
             public override Expression<Func<Report, bool>> ToExpression()
             {
-                return r => r.LastModificationTime > this.Time;
+                return r => r.Events.Any(e => e.Time > this.Time);
             }
         }
     }
-
-
 }

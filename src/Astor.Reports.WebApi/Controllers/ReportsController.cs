@@ -7,7 +7,9 @@ using Astor.Reports.Domain;
 using Astor.Reports.Protocol;
 using Astor.Reports.Protocol.Models;
 using Astor.Time;
+using PickPoint.Reports.WebApi.Helpers;
 using Report = Astor.Reports.Protocol.Models.Report;
+using ReportChanges = Astor.Reports.Protocol.Models.ReportChanges;
 using ReportsCollection = Astor.Reports.Domain.ReportsCollection;
 
 namespace PickPoint.Reports.WebApi.Controllers
@@ -17,64 +19,42 @@ namespace PickPoint.Reports.WebApi.Controllers
     {
         public ReportsCollection ReportsCollection { get; }
         public RowsStoresFactory RowsStoresFactory { get; }
+        public Mapper Mapper { get; }
 
-        public ReportsController(ReportsCollection reportsCollection, RowsStoresFactory rowsStoresFactory)
+        public ReportsController(ReportsCollection reportsCollection, RowsStoresFactory rowsStoresFactory, Mapper mapper)
         {
             this.ReportsCollection = reportsCollection;
             this.RowsStoresFactory = rowsStoresFactory;
+            this.Mapper = mapper;
         }
         
         [HttpGet("{reportId}")]       
         public async Task<Report> GetAsync(string reportId)
         {
             var report = await this.ReportsCollection.GetAsync(reportId);
-
-            return await this.mapAsync(report);
+            return await this.Mapper.MapAsync(report);
         }
         
         [HttpGet]
         public async Task<Astor.Reports.Protocol.Models.ReportsCollection> GetAsync([FromQuery]ReportsQuery query)
         {
             var reports = await this.ReportsCollection.Store.GetAsync(query);
-
-            return await this.mapAsync(reports);
+            return await this.Mapper.MapAsync(reports);
         }
         
-        [HttpPost()]
+        [HttpPost]
         public async Task<Report> CreateAsync([FromBody] ReportCandidate candidate)
         {
             var report = await Astor.Reports.Domain.Report.CreateAsync(candidate, this.ReportsCollection.Store);
-            return await mapAsync(report);
+            return await this.Mapper.MapAsync(report);
         }
 
-        private async Task<Astor.Reports.Protocol.Models.ReportsCollection> mapAsync(IEnumerable<Astor.Reports.Domain.Report> reports)
+        [HttpPatch("{id}")]
+        public async Task<Report> UpdateAsync(string id, [FromBody] ReportChanges changes)
         {
-            var resultList = new List<Report>();
-
-            foreach (var domainModel in reports)
-            {
-                resultList.Add(await this.mapAsync(domainModel));
-            }
-
-            return new Astor.Reports.Protocol.Models.ReportsCollection
-            {
-                Count = resultList.Count,
-                Reports = resultList.ToArray()
-            };
-        }
-        
-        private async Task<Report> mapAsync(Astor.Reports.Domain.Report report)
-        {
-            return new()
-            {
-                Id = report.Id,
-                Type = report.Type,
-                Status = report.Status,
-                CreationTime = report.CreationTime,
-                LastModificationTime = report.LastModificationTime,
-                EstimatedRowsCount = report.EstimatedRowsCount,
-                RowsCount = await report.CountRowsAsync("{}", this.RowsStoresFactory)
-            };
+            var report = await this.ReportsCollection.GetAsync(id);
+            report = await report.SaveAsync(changes, this.ReportsCollection.Store);
+            return await this.Mapper.MapAsync(report);
         }
     }
 }

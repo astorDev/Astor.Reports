@@ -10,6 +10,7 @@
 
     <ItemGroup>
       <PackageReference Include="Astor.Time" Version="1.0.0" />
+      <PackageReference Include="SpeciVacation" Version="1.0.2" />
     </ItemGroup>
 
 </Project>

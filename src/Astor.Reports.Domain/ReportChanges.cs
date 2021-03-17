@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using Astor.Reports.Protocol.Models;
 
 namespace Astor.Reports.Domain
@@ -7,15 +8,15 @@ namespace Astor.Reports.Domain
     {
         public string ReportId { get; }
         
-        public DateTime? LastModificationTime { get; set; }
-        
         public ReportStatus? Status { get; set; }
 
+        public List<EventCandidate> Events { get; set; } = new();
+        
         public ReportChanges(string reportId)
         {
             this.ReportId = reportId;
         }
         
-
+        
     }
 }

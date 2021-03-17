@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -6,9 +7,13 @@ using MongoDB.Bson;
 using MongoDB.Driver;
 using Astor.Reports.Data.Models;
 using Astor.Reports.Domain;
+using Astor.Reports.Protocol;
 using Astor.Reports.Protocol.Models;
+using SpeciVacation;
+using Event = Astor.Reports.Data.Models.Event;
 using Export = Astor.Reports.Protocol.Models.Export;
 using Report = Astor.Reports.Data.Models.Report;
+using ReportChanges = Astor.Reports.Domain.ReportChanges;
 
 namespace Astor.Reports.Data
 {
@@ -37,10 +42,16 @@ namespace Astor.Reports.Data
                 yield return new UpdateDefinitionBuilder<Report>().Set(m => m.Status, changes.Status.Value);
             }
 
-            if (changes.LastModificationTime != null)
+            if (changes.Events != null)
             {
-                yield return new UpdateDefinitionBuilder<Report>().Set(
-                    m => m.LastModificationTime, changes.LastModificationTime.Value);
+                foreach (var @event in changes.Events)
+                {
+                    yield return new UpdateDefinitionBuilder<Report>().AddToSet(m => m.Events, new Models.Event
+                    {
+                        Time = @event.Time,
+                        Type = @event.Type
+                    });
+                }
             }
         }
 
@@ -50,10 +61,37 @@ namespace Astor.Reports.Data
             return map(data);
         }
 
+        public async Task<Domain.Report> SearchAsync(ReportsFilter filter)
+        {
+            var report = await this.finder(filter).FirstOrDefaultAsync();
+            return map(report);
+        }
+
         public async Task<IEnumerable<Domain.Report>> GetAsync(ReportsQuery query)
         {
             var data = await this.Collection.Find(query.ToSpecification().ToExpression()).ToListAsync();
             return data.Select(map);
+        }
+
+        public async Task<IEnumerable<Domain.Report>> GetAsync(ReportsFilter filter)
+        {
+            var data = await this.finder(filter).ToListAsync();
+            return data.Select(map);
+        }
+
+        public IFindFluent<Report, Report> finder(ReportsFilter filter)
+        {
+            var spec = Specification<Data.Models.Report>.All;
+
+            FilterDefinition<Report> mongoFilter = spec.ToExpression();
+            
+            if (filter.AnyEvent != null)
+            {
+                mongoFilter &= new FilterDefinitionBuilder<Report>()
+                    .ElemMatch(r => r.Events, filter.AnyEvent.ToSpecification().ToExpression());;
+            }
+
+            return this.Collection.Find(mongoFilter);
         }
 
         public async Task<Models.Report> AddAsync(string id)
@@ -121,10 +159,13 @@ namespace Astor.Reports.Data
             {
                 Id = creationChanges.ReportToAdd.Id,
                 Type = creationChanges.ReportToAdd.Type,
-                CreationTime = creationChanges.ReportToAdd.CreationTime,
-                LastModificationTime = creationChanges.ReportToAdd.LastModificationTime,
                 EstimatedRowsCount = creationChanges.ReportToAdd.EstimatedRowsCount,
-                Status = creationChanges.ReportToAdd.Status
+                Status = creationChanges.ReportToAdd.Status,
+                Events = creationChanges.Events.Select(e => new Models.Event
+                {
+                    Type = e.Type,
+                    Time = e.Time,
+                }).ToArray()
             };
 
             await this.Collection.InsertOneAsync(reportData);
@@ -137,10 +178,15 @@ namespace Astor.Reports.Data
             {
                 Id = data.Id,
                 Type = data.Type,
-                CreationTime = data.CreationTime,
-                LastModificationTime = data.LastModificationTime,
                 EstimatedRowsCount = data.EstimatedRowsCount,
-                Status = data.Status
+                Status = data.Status,
+                Events = data.Events.Select(e => new Domain.Event
+                {
+                    Id = e.Id.ToString(),
+                    Processed = e.Processed,
+                    Time = e.Time,
+                    Type = e.Type
+                }).ToArray()
             };
         }
     }

@@ -10,6 +10,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Reports.Domain", "Ast
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Reports.Tests", "Astor.Reports.Tests\Astor.Reports.Tests.csproj", "{D1DF5680-B289-4E3A-BF28-C43D9B72A921}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Astor.Reports.EventsPublisher", "Astor.Reports.EventsPublisher\Astor.Reports.EventsPublisher.csproj", "{79574426-10E0-4FC7-8F14-4529FB3D2324}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -36,5 +38,9 @@ Global
 		{D1DF5680-B289-4E3A-BF28-C43D9B72A921}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D1DF5680-B289-4E3A-BF28-C43D9B72A921}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D1DF5680-B289-4E3A-BF28-C43D9B72A921}.Release|Any CPU.Build.0 = Release|Any CPU
+		{79574426-10E0-4FC7-8F14-4529FB3D2324}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{79574426-10E0-4FC7-8F14-4529FB3D2324}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{79574426-10E0-4FC7-8F14-4529FB3D2324}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{79574426-10E0-4FC7-8F14-4529FB3D2324}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
